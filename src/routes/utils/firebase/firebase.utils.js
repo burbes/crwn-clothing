@@ -7,7 +7,8 @@ import {
     signInWithPopup ,
     GoogleAuthProvider, 
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    signOut
 } from 'firebase/auth';
 
 // Importing the Cloud Firestore library
@@ -86,4 +87,9 @@ async (email, password) => {
     if(!email || !password) return;
     
     return await signInWithEmailAndPassword(auth, email, password);         
+}
+
+// Sign out
+export const signOutAuthUser = async () => {
+    return await signOut(auth);
 }
