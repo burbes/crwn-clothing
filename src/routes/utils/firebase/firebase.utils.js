@@ -6,7 +6,8 @@ import {
     signInWithRedirect, 
     signInWithPopup ,
     GoogleAuthProvider, 
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
 } from 'firebase/auth';
 
 // Importing the Cloud Firestore library
@@ -16,7 +17,6 @@ import {
     getDoc,
     setDoc
  } from 'firebase/firestore'
-import { async } from 'q';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBl6WfAhC_DYkXQ4J0i28rb5Xx9OSSsaPE",
@@ -28,7 +28,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -77,4 +77,13 @@ async (email, password) => {
     if(!email || !password) return;
     
     return await createUserWithEmailAndPassword(auth, email, password);         
+}
+
+// Sign in with email and password
+export const signInAuthUserWithEmailAndPassword = 
+async (email, password) => {
+
+    if(!email || !password) return;
+    
+    return await signInWithEmailAndPassword(auth, email, password);         
 }
