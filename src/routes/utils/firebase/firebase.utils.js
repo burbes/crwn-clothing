@@ -1,15 +1,15 @@
 import { initializeApp } from 'firebase/app';
 
 // Importing the authentication library
-import { 
-    getAuth, 
-    signInWithRedirect, 
-    signInWithPopup ,
-    GoogleAuthProvider, 
+import {
+    getAuth,
+    signInWithRedirect,
+    signInWithPopup,
+    GoogleAuthProvider,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
 } from 'firebase/auth';
 
 // Importing the Cloud Firestore library
@@ -17,8 +17,12 @@ import {
     getFirestore,
     doc,
     getDoc,
-    setDoc
- } from 'firebase/firestore'
+    setDoc,
+    collection,
+    writeBatch,
+    query,
+    getDocs
+} from 'firebase/firestore'
 
 const firebaseConfig = {
     apiKey: "AIzaSyBl6WfAhC_DYkXQ4J0i28rb5Xx9OSSsaPE",
@@ -34,8 +38,8 @@ initializeApp(firebaseConfig);
 
 const googleProvider = new GoogleAuthProvider();
 
-googleProvider.setCustomParameters({ 
-    prompt: 'select_account' 
+googleProvider.setCustomParameters({
+    prompt: 'select_account'
 });
 
 export const auth = getAuth();
@@ -44,10 +48,42 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 
 export const db = getFirestore();
 
+// Add a new document with a generated id.
+export const addCollectionAndDocuments = async (
+    collectionKey,
+    objectsToAdd,
+    field) => {
+    const collectionRef = collection(db, collectionKey);
+    const batch = writeBatch(db);
+
+    objectsToAdd.forEach(obj => {
+        const newDocRef = doc(collectionRef, obj.title.toLowerCase());
+        batch.set(newDocRef, obj);
+    });
+
+    return await batch.commit();
+
+};
+
+// Get all documents from a collection
+export const getCategoriesAndDocuments = async () => {
+    const categoriesRef = collection(db, 'categories');
+    const q = query(categoriesRef)
+    const querySnapshot = await getDocs(q);
+    const categoriesMap = querySnapshot.docs.reduce((accumulator, docSnapshot) => {
+        const { title, items } = docSnapshot.data();
+        accumulator[title.toLowerCase()] = items;
+        return accumulator;
+    }, {})
+
+    return categoriesMap;
+}
+
+
 export const createUserDocumentFromAuth = async (
-    userAuth, 
+    userAuth,
     additionalInformation = {}
-    ) => {
+) => {
 
     if (!userAuth) return;
 
@@ -68,27 +104,27 @@ export const createUserDocumentFromAuth = async (
         } catch (error) {
             console.log('error creating user', error.message);
         }
-    } 
+    }
     return userDocRef;
 }
 
 // Create a new user with email and password
-export const createAuthUserWithEmailAndPassword = 
-async (email, password) => {
+export const createAuthUserWithEmailAndPassword =
+    async (email, password) => {
 
-    if(!email || !password) return;
-    
-    return await createUserWithEmailAndPassword(auth, email, password);         
-}
+        if (!email || !password) return;
+
+        return await createUserWithEmailAndPassword(auth, email, password);
+    }
 
 // Sign in with email and password
-export const signInAuthUserWithEmailAndPassword = 
-async (email, password) => {
+export const signInAuthUserWithEmailAndPassword =
+    async (email, password) => {
 
-    if(!email || !password) return;
-    
-    return await signInWithEmailAndPassword(auth, email, password);         
-}
+        if (!email || !password) return;
+
+        return await signInWithEmailAndPassword(auth, email, password);
+    }
 
 // Sign out
 export const signOutAuthUser = async () => {
@@ -97,7 +133,7 @@ export const signOutAuthUser = async () => {
 
 // On auth state changed (user logged in or logged out)
 export const onAuthStateChangedListener = (callback) => {
-    if(!callback) return;
+    if (!callback) return;
     // return onAuthStateChanged(auth, callback, errorCallback, completedCallback);
     return onAuthStateChanged(auth, callback);
 }

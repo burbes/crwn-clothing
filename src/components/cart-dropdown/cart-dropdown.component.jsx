@@ -22,9 +22,11 @@ const CartDropdown = () => {
                 {cartItems.map((item) => (
                     <CartItem key={item.id} item={item} />
                 ))}
-                <span className='empty-message'>Your cart is empty</span>
+                {cartItems.length === 0 &&
+                    <span className='empty-message'>Your cart is empty</span>
+                }
             </div>
-            <Button onClick={goToCheckoutHandler} buttonType='inverted' >GO TO CHECKOUT</Button>
+            <Button onClick={goToCheckoutHandler} buttonType='inverted' >GOTOCHECKOUT</Button>
         </div>
     )
 }
