@@ -15,6 +15,7 @@ export const BUTTON_TYPES_CLASSES = {
     inverted: 'inverted',
 }
 
+// return the button component based on the button type
 const getButton = (buttonType = BUTTON_TYPES_CLASSES.base) =>
 ({
     [BUTTON_TYPES_CLASSES.base]: BaseButton,
