@@ -8,7 +8,7 @@ import {
     // createUserDocumentFromAuth,
     signInAuthUserWithEmailAndPassword
 }
-    from '../../routes/utils/firebase/firebase.utils';
+    from '../../utils/firebase/firebase.utils';
 
 import './sign-in-form.styles.scss';
 

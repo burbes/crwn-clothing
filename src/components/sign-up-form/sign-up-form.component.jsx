@@ -7,7 +7,7 @@ import {
     createAuthUserWithEmailAndPassword,
     createUserDocumentFromAuth
 }
-    from '../../routes/utils/firebase/firebase.utils';
+    from '../../utils/firebase/firebase.utils';
 
 import './sign-up.styles.scss';
 

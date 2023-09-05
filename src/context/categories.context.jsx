@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 
-import { getCategoriesAndDocuments } from "../routes/utils/firebase/firebase.utils.js";
+import { getCategoriesAndDocuments } from "../utils/firebase/firebase.utils.js";
 
 // data used to populate categories collection in firestore
 // import SHOP_DATA from '../shop-data.js'
