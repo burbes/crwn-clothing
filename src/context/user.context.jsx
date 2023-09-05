@@ -14,6 +14,10 @@ export const USER_ACTION_TYPES = {
     SET_CURRENT_USER: 'SET_CURRENT_USER',
 }
 
+const INITIAL_STATE = {
+    currentUser: null,
+}
+
 // reducer function to update the state based on the action type
 export const userReducer = (state, action) => {
     const { type, payload } = action;
@@ -29,10 +33,6 @@ export const userReducer = (state, action) => {
             throw new Error(`Unknown action type: ${type}`);
     }
 
-}
-
-const INITIAL_STATE = {
-    currentUser: null,
 }
 
 export const UserProvider = ({ children }) => {
