@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
@@ -9,7 +10,8 @@ import {
 }
     from '../../utils/firebase/firebase.utils';
 
-import './sign-up.styles.scss';
+import {SignUpContainer} from './sign-up.styles.jsx';
+import { signUpStart } from '../../store/user/user.action';
 
 const defaultFormFields = {
     displayName: '',
@@ -21,6 +23,7 @@ const defaultFormFields = {
 const SignUpForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { displayName, email, password, confirmPassword } = formFields;
+    const dispatch = useDispatch();
 
     const resetFormFiels = () => {
         setFormFields(defaultFormFields);
@@ -35,12 +38,7 @@ const SignUpForm = () => {
         }
 
         try {
-            const { user } = await createAuthUserWithEmailAndPassword(
-                email,
-                password
-            );
-
-            await createUserDocumentFromAuth(user, { displayName });
+            dispatch(signUpStart(email, password, displayName));
             resetFormFiels(); // reset the form fields
         }
         catch (error) {
@@ -58,7 +56,7 @@ const SignUpForm = () => {
     }
 
     return (
-        <div className='sign-up-container'>
+        <SignUpContainer>
             <h2>Don't have an account?</h2>
             <span>Sign Up with your email and password</span>
             <form onSubmit={handleSubmit}>
@@ -104,7 +102,7 @@ const SignUpForm = () => {
                     
                 <Button type="submit">Sign Up</Button>
             </form>
-        </div>
+        </SignUpContainer>
     );
 }
 
